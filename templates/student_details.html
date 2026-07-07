@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% block title %}Student Details{% endblock %}
+{% block content %}
+<div class="card">
+    <h2>Student Details</h2>
+    <form method="POST" style="margin-bottom:20px;">
+        <p><strong>Roll No:</strong> {{ student.roll_no }}</p>
+        <div class="form-group"><label>Name *</label>
+            <input type="text" name="name" value="{{ student.name }}" required></div>
+        <div class="form-group"><label>Age *</label>
+            <input type="number" name="age" value="{{ student.age }}" required min="1" max="120"></div>
+        <div class="form-group"><label>Course *</label>
+            <input type="text" name="course" value="{{ student.course }}" required></div>
+        <div class="form-group"><label>Email</label>
+            <input type="email" name="email" value="{{ student.email }}"></div>
+        <button type="submit" class="btn btn-success">Save Changes</button>
+        <a href="{{ url_for('list_students') }}" class="btn">Back</a>
+    </form>
+
+    <p style="margin-top:10px; color:#666;">
+        Grade and percentage are calculated from marks, so they are not entered manually.
+    </p>
+
+    <h3 style="margin-top:20px;">Marks</h3>
+    {% if student.marks %}
+    <table>
+        <thead><tr><th>Subject</th><th>Mark</th></tr></thead>
+        <tbody>
+        {% for subject, mark in student.marks.items() %}
+            <tr><td>{{ subject }}</td><td>{{ mark }}</td></tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <p style="margin-top:15px;">
+        <strong>Total:</strong> {{ student.calculate_total() }} / {{ student.marks|length * 100 }}<br>
+        <strong>Percentage:</strong> {{ "%.2f"|format(student.calculate_percentage()) }}%<br>
+        <strong>Grade:</strong> {{ student.calculate_grade() }}<br>
+        <strong>Status:</strong>
+        {% set status = student.get_status() %}
+        {% if status == 'Pass' %}<span class="badge badge-pass">Pass</span>
+        {% elif status == 'Fail' %}<span class="badge badge-fail">Fail</span>
+        {% else %}<span class="badge badge-nomarks">No Marks</span>{% endif %}
+    </p>
+    {% else %}
+        <p>No marks added yet. <a href="{{ url_for('add_marks', roll_no=student.roll_no) }}">Add Marks</a></p>
+    {% endif %}
+
+    <p style="margin-top:20px;">
+        <a href="{{ url_for('add_marks', roll_no=student.roll_no) }}" class="btn" style="background:#8e44ad;">Manage Marks</a>
+        <a href="{{ url_for('list_students') }}" class="btn">Back</a>
+    </p>
+</div>
+{% endblock %}

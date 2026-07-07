@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block title %}Edit Student{% endblock %}
+{% block content %}
+<div class="card">
+    <h2>Edit Student (Roll No: {{ student.roll_no }})</h2>
+    <form method="POST">
+        <div class="form-group"><label>Full Name *</label>
+            <input type="text" name="name" value="{{ student.name }}" required></div>
+        <div class="form-group"><label>Age *</label>
+            <input type="number" name="age" value="{{ student.age }}" required></div>
+        <div class="form-group"><label>Course *</label>
+            <input type="text" name="course" value="{{ student.course }}" required></div>
+        <div class="form-group"><label>Email</label>
+            <input type="email" name="email" value="{{ student.email }}"></div>
+        <button type="submit" class="btn btn-success">Update</button>
+        <a href="{{ url_for('list_students') }}" class="btn">Cancel</a>
+    </form>
+</div>
+{% endblock %}

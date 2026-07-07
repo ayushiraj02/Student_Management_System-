@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% block title %}Reports{% endblock %}
+{% block content %}
+<div class="card">
+    <h2>📊 Reports</h2>
+    <div class="stats-grid">
+        <div class="stat-card" style="background:#27ae60;"><h3>{{ pass_fail.pass }}</h3><p>Passed</p></div>
+        <div class="stat-card" style="background:#e74c3c;"><h3>{{ pass_fail.fail }}</h3><p>Failed</p></div>
+        <div class="stat-card" style="background:#95a5a6;"><h3>{{ pass_fail.no_marks }}</h3><p>No Marks</p></div>
+        <div class="stat-card" style="background:#8e44ad;"><h3>{{ "%.2f"|format(average) }}%</h3><p>Average</p></div>
+    </div>
+</div>
+
+<div class="card">
+    <h3>🏆 Top 5 Students</h3>
+    {% if topper_list %}
+    <table>
+        <thead><tr><th>Rank</th><th>Roll No</th><th>Name</th><th>Percentage</th><th>Grade</th></tr></thead>
+        <tbody>
+        {% for student in topper_list %}
+            <tr>
+                <td>{{ loop.index }}</td>
+                <td>{{ student.roll_no }}</td>
+                <td>{{ student.name }}</td>
+                <td>{{ "%.2f"|format(student.calculate_percentage()) }}%</td>
+                <td>{{ student.calculate_grade() }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+        <p>No students with marks found.</p>
+    {% endif %}
+</div>
+
+<div class="card">
+    <h3>📚 Subject-wise Statistics</h3>
+    {% if subject_stats %}
+    <table>
+        <thead><tr><th>Subject</th><th>Students</th><th>Average</th><th>Highest</th><th>Lowest</th></tr></thead>
+        <tbody>
+        {% for subject, stats in subject_stats.items() %}
+            <tr>
+                <td>{{ subject }}</td>
+                <td>{{ stats.count }}</td>
+                <td>{{ "%.2f"|format(stats.average) }}</td>
+                <td>{{ stats.highest }}</td>
+                <td>{{ stats.lowest }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+        <p>No subject data available.</p>
+    {% endif %}
+</div>
+{% endblock %}

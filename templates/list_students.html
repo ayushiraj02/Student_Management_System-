@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block title %}All Students{% endblock %}
+{% block content %}
+<div class="card">
+    <h2>All Students ({{ students|length }})</h2>
+    {% if students %}
+    <table>
+        <thead>
+            <tr><th>Roll No</th><th>Name</th><th>Age</th><th>Course</th>
+                <th>Status</th><th>Percentage</th><th>Grade</th><th>Actions</th></tr>
+        </thead>
+        <tbody>
+        {% for student in students %}
+            <tr>
+                <td>{{ student.roll_no }}</td>
+                <td>{{ student.name }}</td>
+                <td>{{ student.age }}</td>
+                <td>{{ student.course }}</td>
+                <td>
+                    {% set status = student.get_status() %}
+                    {% if status == 'Pass' %}<span class="badge badge-pass">Pass</span>
+                    {% elif status == 'Fail' %}<span class="badge badge-fail">Fail</span>
+                    {% else %}<span class="badge badge-nomarks">No Marks</span>{% endif %}
+                </td>
+                <td>{{ "%.2f"|format(student.calculate_percentage()) }}%</td>
+                <td>{{ student.calculate_grade() }}</td>
+                <td>
+                    <a href="{{ url_for('student_details', roll_no=student.roll_no) }}" class="btn" style="padding:5px 10px;">View</a>
+                    <a href="{{ url_for('edit_student', roll_no=student.roll_no) }}" class="btn btn-success" style="padding:5px 10px;">Edit</a>
+                    <a href="{{ url_for('add_marks', roll_no=student.roll_no) }}" class="btn" style="padding:5px 10px; background:#8e44ad;">Marks</a>
+                    <form method="POST" action="{{ url_for('delete_student', roll_no=student.roll_no) }}" style="display:inline;" onsubmit="return confirm('Delete this student?')">
+                        <button type="submit" class="btn btn-danger" style="padding:5px 10px;">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+        <p>No students found. <a href="{{ url_for('add_student') }}">Add first student</a></p>
+    {% endif %}
+</div>
+{% endblock %}

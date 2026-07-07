@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<h2>Welcome, {{ username }}!</h2>
+<div class="stats-grid">
+    <div class="stat-card"><h3>{{ total_students }}</h3><p>Total Students</p></div>
+    <div class="stat-card" style="background:#27ae60;"><h3>{{ pass_count }}</h3><p>Passed</p></div>
+    <div class="stat-card" style="background:#e74c3c;"><h3>{{ fail_count }}</h3><p>Failed</p></div>
+</div>
+<div class="card">
+    <h3>Quick Actions</h3>
+    <p>
+        <a href="{{ url_for('add_student') }}" class="btn btn-success">➕ Add New Student</a>
+        <a href="{{ url_for('list_students') }}" class="btn">📋 View All Students</a>
+        <a href="{{ url_for('reports') }}" class="btn">📊 View Reports</a>
+    </p>
+</div>
+{% endblock %}

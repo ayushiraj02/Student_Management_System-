@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% block title %}Manage Marks{% endblock %}
+{% block content %}
+<div class="card">
+    <h2>Manage Marks - {{ student.name }} ({{ student.roll_no }})</h2>
+
+    <h3>Add New Mark</h3>
+    <form method="POST">
+        <div class="form-group">
+            <label>Subject Name</label>
+            <input type="text" name="subject" required placeholder="e.g., Math, Science">
+        </div>
+        <div class="form-group">
+            <label>Mark (0-100)</label>
+            <input type="number" name="mark" required min="0" max="100" step="0.01">
+        </div>
+        <button type="submit" class="btn btn-success">Add/Update Mark</button>
+    </form>
+
+    <h3 style="margin-top:30px;">Existing Marks</h3>
+    {% if student.marks %}
+    <table>
+        <thead><tr><th>Subject</th><th>Mark</th><th>Action</th></tr></thead>
+        <tbody>
+        {% for subject, mark in student.marks.items() %}
+            <tr>
+                <td>{{ subject }}</td><td>{{ mark }}</td>
+                <td>
+                    <form method="POST" action="{{ url_for('delete_mark', roll_no=student.roll_no, subject=subject) }}" style="display:inline;" onsubmit="return confirm('Delete this mark?')">
+                        <button type="submit" class="btn btn-danger" style="padding:5px 10px;">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <p style="margin-top:15px;">
+        <strong>Percentage:</strong> {{ "%.2f"|format(student.calculate_percentage()) }}% |
+        <strong>Grade:</strong> {{ student.calculate_grade() }} |
+        <strong>Status:</strong> {{ student.get_status() }}
+    </p>
+    {% else %}
+        <p>No marks added yet.</p>
+    {% endif %}
+    <a href="{{ url_for('list_students') }}" class="btn" style="margin-top:15px;">Back to List</a>
+</div>
+{% endblock %}
