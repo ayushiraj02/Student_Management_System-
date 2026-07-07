@@ -5,6 +5,10 @@
     "age": "20",
     "course": "btech",
     "email": "sam123@gmail.com",
-    "marks": {}
+    "marks": {
+      "maths": 96.0,
+      "science": 81.0,
+      "english": 71.0
+    }
   }
 ]
